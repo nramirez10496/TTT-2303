@@ -44,32 +44,44 @@ public class TTT : MonoBehaviour
 
     public void MakeOptimalMove()
     {
-
+        // find whos oponenet 
+        PlayerOption opponent;
+        //current player is x
+        if (currentPlayer == PlayerOption.X)
+        {
+            //opponent is o
+            opponent = PlayerOption.O;
+        }
+        else
+        {
+            //current player is o opponent is x
+            opponent = PlayerOption.X;
+        }
         //INSTRUCTIONS If the computer can win(has two in a row, and the third space is open), it should do so.
         for (int row = 0; row < Rows; row++)
-        {
-            for (int column = 0; column < Columns; column++)
             {
-                //test empty spaces
-                if (cells[column, row].current == PlayerOption.NONE)
+                for (int column = 0; column < Columns; column++)
                 {
-                    //attempt move 
-                    cells[column, row].current = currentPlayer;
-                    //if move would win
-                    if (GetWinner() == currentPlayer)
+                    //test empty spaces
+                    if (cells[column, row].current == PlayerOption.NONE)
                     {
-                        //remove attempt
+                        //attempt move 
+                        cells[column, row].current = currentPlayer;
+                        //if move would win
+                        if (GetWinner() == currentPlayer)
+                        {
+                            //remove attempt
+                            cells[column, row].current = PlayerOption.NONE;
+                            //make permanent move
+                            ChooseSpace(column, row);
+                            return;
+                        }
+                        //move does not win remove attempt
                         cells[column, row].current = PlayerOption.NONE;
-                        //make permanent move
-                        ChooseSpace(column, row);
-                        return;
                     }
-                    //move does not win remove attempt
-                    cells[column, row].current = PlayerOption.NONE;
-                }
 
+                }
             }
-        }
 
         //INSTRUCTIONS If the opponent has two in a row, and the third space is open, block them to prevent victory.
 
@@ -123,8 +135,16 @@ public class TTT : MonoBehaviour
         }
 
         //INSTRUCTIONS If the opponent controls a corner, but the center is open, take the center
+        bool emptyCenter = cells[1, 1].current == PlayerOption.NONE;
+        bool opponentCorner = cells[0, 0].current == opponent || cells[2, 0].current == opponent || cells[0, 2].current == opponent || cells[2, 2].current == opponent;
 
-
+        //both opponent has corner and middle is free
+        if (opponentCorner && emptyCenter)
+        {
+            //choose middle
+            ChooseSpace(1, 1);
+            return;
+        }
         //INSTRUCTIONS If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
 
 
