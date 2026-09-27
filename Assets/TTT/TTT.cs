@@ -1,6 +1,13 @@
+using NUnit.Framework;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
+using UnityEditor.ShaderGraph;
 using UnityEngine;
+using UnityEngine.XR;
+using static Unity.Collections.AllocatorManager;
 
 public enum PlayerOption
 {
@@ -38,6 +45,44 @@ public class TTT : MonoBehaviour
     public void MakeOptimalMove()
     {
 
+        //If the computer can win(has two in a row, and the third space is open), it should do so.
+        for (int row = 0; row < Rows; row++)
+        {
+            for (int column = 0; column < Columns; column++)
+            {
+                //test empty spaces
+                if (cells[column, row].current == PlayerOption.NONE)
+                {
+                    //attempt move 
+                    cells[column, row].current = currentPlayer;
+                    //if move would win
+                    if (GetWinner() == currentPlayer)
+                    {
+                        //remove attempt
+                        cells[column, row].current = PlayerOption.NONE;
+                        //make permanent move
+                        ChooseSpace(column, row);
+
+                        return;
+                    }
+                    //move does not win remove attempt
+                    cells[column, row].current = PlayerOption.NONE;
+                }
+
+            }
+        }
+
+        //If the opponent has two in a row, and the third space is open, block them to prevent victory.
+        
+        //If the board is empty, it is advantageous to take a corner
+        
+        //If the opponent controls a corner, but the center is open, take the center
+        
+        //If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
+        
+            //at this point, the processes of attempting to win/ blocking will likely play out and result in a tie.
+        
+            //as a fail - safe, if none of the above happens, take a random cell
     }
 
     public void ChooseSpace(int column, int row)
