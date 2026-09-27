@@ -45,7 +45,7 @@ public class TTT : MonoBehaviour
     public void MakeOptimalMove()
     {
 
-        //If the computer can win(has two in a row, and the third space is open), it should do so.
+        //INSTRUCTIONS If the computer can win(has two in a row, and the third space is open), it should do so.
         for (int row = 0; row < Rows; row++)
         {
             for (int column = 0; column < Columns; column++)
@@ -62,7 +62,6 @@ public class TTT : MonoBehaviour
                         cells[column, row].current = PlayerOption.NONE;
                         //make permanent move
                         ChooseSpace(column, row);
-
                         return;
                     }
                     //move does not win remove attempt
@@ -72,17 +71,67 @@ public class TTT : MonoBehaviour
             }
         }
 
-        //If the opponent has two in a row, and the third space is open, block them to prevent victory.
-        
-        //If the board is empty, it is advantageous to take a corner
-        
-        //If the opponent controls a corner, but the center is open, take the center
-        
-        //If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
-        
-            //at this point, the processes of attempting to win/ blocking will likely play out and result in a tie.
-        
-            //as a fail - safe, if none of the above happens, take a random cell
+        //INSTRUCTIONS If the opponent has two in a row, and the third space is open, block them to prevent victory.
+
+
+        //INSTRUCTIONS If the board is empty, it is advantageous to take a corner
+        bool emptyBoard = true;
+
+        //check board if empty
+        for (int row = 0; row < Rows; row++)
+        {
+            for (int column = 0; column < Columns; column++)
+            {
+                //space occupied, board not empty 
+                if (cells[column,row].current != PlayerOption.NONE)
+                {
+                    emptyBoard = false;
+                }
+            }
+
+        }
+        //emptY board, take random corner
+        if (emptyBoard)
+        {
+            //random number /4 for corners
+            int randomCorner = Random.Range(0, 4);
+
+            //choose corner based on random num
+            switch (randomCorner)
+            {
+                //top left 
+                case 0:
+                    ChooseSpace(0, 0);
+                    break;
+
+                //top right
+                case 1:
+                    ChooseSpace(2, 0);
+                    break;
+
+                //bottom left
+                case 2:
+                    ChooseSpace(0, 2);
+                    break;
+
+                //bottom right
+                case 3:
+                    ChooseSpace(2, 2);
+                    break;
+            }
+            return;
+        }
+
+        //INSTRUCTIONS If the opponent controls a corner, but the center is open, take the center
+
+
+        //INSTRUCTIONS If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
+
+
+        //INSTRUCTIONS at this point, the processes of attempting to win/ blocking will likely play out and result in a tie.
+
+
+        //INSTRUCTIONS as a fail - safe, if none of the above happens, take a random cell
     }
 
     public void ChooseSpace(int column, int row)
