@@ -169,14 +169,47 @@ public class TTT : MonoBehaviour
             ChooseSpace(1, 1);
             return;
         }
-        
+
         //INSTRUCTIONS If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
 
 
-        //INSTRUCTIONS at this point, the processes of attempting to win/ blocking will likely play out and result in a tie.
-
-
         //INSTRUCTIONS as a fail - safe, if none of the above happens, take a random cell
+        //check for any empty space
+        bool emptySpace = false;
+        for (int row = 0; row < Rows; row++)
+        {
+            for (int column = 0; column < Columns; column++)
+            {
+                //at least one empty
+                if (cells[column, row].current == PlayerOption.NONE)
+                {
+                    emptySpace = true;
+                    break;
+                }
+            }
+            //no empty spaces left
+            if (emptySpace)
+            {
+                break;
+            }
+        }
+
+        //look for random empty space to choose if it exists
+        if(emptySpace)
+        {
+            while (true)
+            {
+                int column = Random.Range(0, Columns);
+                int row = Random.Range(0, Rows);
+
+                //chose empty space place mark
+                if (cells[column, row].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(column, row);
+                    break;
+                }
+            }
+        }
     }
 
     public void ChooseSpace(int column, int row)
