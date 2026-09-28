@@ -66,7 +66,7 @@ public class TTT : MonoBehaviour
                     //test empty spaces
                     if (cells[column, row].current == PlayerOption.NONE)
                     {
-                        //attempt move 
+                        //attempt a move 
                         cells[column, row].current = currentPlayer;
                         //if move would win
                         if (GetWinner() == currentPlayer)
@@ -171,7 +171,80 @@ public class TTT : MonoBehaviour
         }
 
         //INSTRUCTIONS If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
+        bool playerCorner = cells[0, 0].current == currentPlayer || cells[2, 0].current == currentPlayer || cells[0, 2].current == currentPlayer || cells[2, 2].current == currentPlayer;
+        bool playerCenter = cells[1, 1].current == currentPlayer;
 
+        //current player has corner but not center
+        if (playerCorner && !playerCenter)
+        {
+            //check top left corner
+            if (cells[0, 0].current == currentPlayer) 
+            {
+                //try to the side, if empty chose space
+                if (cells[1,0].current==PlayerOption.NONE)
+                {
+                    ChooseSpace(1, 0);
+                    return;
+                }
+                //try down, if empty chose space
+                if (cells[0, 1].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(0, 1);
+                    return;
+                }
+            }
+
+            //check top righ tcorner
+            if (cells[2, 0].current == currentPlayer)
+            {
+                //try to the side, if empty chose space
+                if (cells[1, 0].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(1, 0);
+                    return;
+                }
+                //try down, if empty chose space
+                if (cells[2, 1].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(2, 1);
+                    return;
+                }
+            }
+
+            //check bottom left corner 
+            if (cells[0, 2].current == currentPlayer)
+            {
+                //try to the side, if empty chose space
+                if (cells[1, 2].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(1, 2);
+                    return;
+                }
+                //try up, if empty chose space
+                if (cells[0, 1].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(0, 1);
+                    return;
+                }
+            }
+
+            //check bottom right corner
+            if (cells[2, 2].current == currentPlayer)
+            {
+                //try to the side, if empty chose space
+                if (cells[1, 2].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(1, 2);
+                    return;
+                }
+                //try up, if empty chose space
+                if (cells[2, 1].current == PlayerOption.NONE)
+                {
+                    ChooseSpace(2, 1);
+                    return;
+                }
+            }
+        }
 
         //INSTRUCTIONS as a fail - safe, if none of the above happens, take a random cell
         //check for any empty space
@@ -193,7 +266,6 @@ public class TTT : MonoBehaviour
                 break;
             }
         }
-
         //look for random empty space to choose if it exists
         if(emptySpace)
         {
