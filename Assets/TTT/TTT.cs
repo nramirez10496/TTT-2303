@@ -57,6 +57,7 @@ public class TTT : MonoBehaviour
             //current player is o opponent is x
             opponent = PlayerOption.X;
         }
+        
         //INSTRUCTIONS If the computer can win(has two in a row, and the third space is open), it should do so.
         for (int row = 0; row < Rows; row++)
             {
@@ -84,7 +85,30 @@ public class TTT : MonoBehaviour
             }
 
         //INSTRUCTIONS If the opponent has two in a row, and the third space is open, block them to prevent victory.
+        for (int row = 0; row < Rows; row++)
+        {
+            for (int column = 0; column < Columns; column++)
+            {
+                //empty space s
+                if (cells[column, row].current == PlayerOption.NONE)
+                {
+                    //test oponent move on empty space
+                    cells[column, row].current = opponent;
 
+                    //check if itd win
+                    if (GetWinner() == opponent)
+                    {
+                        //remove test
+                        cells[column, row].current = PlayerOption.NONE;
+                        //mark permanent move (not oponents) 
+                        ChooseSpace(column, row);
+                        return;
+                    }
+                    //opponent move woulnt win remove test
+                    cells[column, row].current = PlayerOption.NONE;
+                }
+            }
+        }
 
         //INSTRUCTIONS If the board is empty, it is advantageous to take a corner
         bool emptyBoard = true;
@@ -145,6 +169,7 @@ public class TTT : MonoBehaviour
             ChooseSpace(1, 1);
             return;
         }
+        
         //INSTRUCTIONS If a player controls a corner, but not the center, they should take a cell adjacent to the corner they control
 
 
